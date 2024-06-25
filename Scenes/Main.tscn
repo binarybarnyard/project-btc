@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://du8eoi0khecea"]
+
+[ext_resource type="TileSet" uid="uid://dbtdtmqaswmkb" path="res://Assets/Sprites/Tilesets/metal_snow_tileset.tres" id="1_m571c"]
+[ext_resource type="PackedScene" uid="uid://w3doujxkwaa4" path="res://Scenes/Player.tscn" id="2_sbw0h"]
+
+[node name="Main" type="Node2D"]
+position = Vector2(464, 584)
+
+[node name="Ground" type="StaticBody2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Ground"]
+
+[node name="Player" parent="." instance=ExtResource("2_sbw0h")]
+scale = Vector2(0.33, 0.33)
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = ExtResource("1_m571c")
+format = 2
+layer_0/tile_data = PackedInt32Array(196607, 0, 0, 131072, 0, 0, 131073, 0, 0, 131074, 0, 0, 131075, 0, 0, 131076, 0, 0, 131077, 0, 0, 196606, 0, 0, 196605, 0, 0, 196604, 0, 0, 196603, 0, 0)
