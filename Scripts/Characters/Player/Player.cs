@@ -43,7 +43,20 @@ public partial class Player : CharacterBody2D
         Vector2 direction = Input.GetVector("move_left", "move_right", "move_up", "move_down");
         if (direction != Vector2.Zero)
         {
-            _velocity.X = direction.X * Speed;
+
+            // Normalize only if both horizontal and vertical inputs are non-zero
+            if (direction.X != 0 && direction.Y != 0)
+            {
+                direction = direction.Normalized();
+                // Add 1/2 speed to account for multi-directional input slowdown while grounded
+                _velocity.X = direction.X * (Speed + Speed / 2);
+            }
+            else
+            {
+                // Apply the speed
+                _velocity.X = direction.X * Speed;
+            }
+
             // Store the last horizontal input direction for flipping the sprite
             if (direction.X < 0)
                 _lastHorizontalInput = "left";
