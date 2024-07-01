@@ -5,15 +5,16 @@ public partial class Player : CharacterBody2D
 {
     // Movement
     private Vector2 _velocity = new();
-    private string _lastHorizontalInput = ""; // To store the last horizontal input direction
+    private string _lastHorizontalInput = "right"; // To store the last horizontal input direction
     public const float Speed = 300.0f;
     public const float JumpVelocity = -400.0f;
-    public const float DashVelocity = 500.0f;
     
     // Powers
     public bool _canDoubleJump = false;
     public bool _isDashing = false;
-    public float _dashTime = 0.1f; // Time in seconds
+    public bool _canAirDash = true;
+    public const float DashVelocity = 500.0f;
+    public float _dashTime = 0.2f; // Time in seconds
 
     // Environment
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
@@ -107,8 +108,8 @@ public partial class Player : CharacterBody2D
     }
 
     private void HandleDash()
-    {
-        if (Input.IsActionJustPressed("dash") && !_isDashing)
+    { // Must be on the floor or have air dash enabled
+        if (Input.IsActionJustPressed("dash") && !_isDashing && (IsOnFloor() || _canAirDash))
         {
             _isDashing = true;
             Vector2 dashDistance = new Vector2(DashVelocity * _dashTime, 0);
@@ -117,15 +118,38 @@ public partial class Player : CharacterBody2D
             {
                 _animatedSprite.Stop();
                 _animatedSprite.Play("jump");
-                Position -= dashDistance;
+                StartDash(-dashDistance);
             }
             else if (_lastHorizontalInput == "right")
             {
                 _animatedSprite.Stop();
                 _animatedSprite.Play("jump");
-                Position += dashDistance;
+                StartDash(dashDistance);
             }
         }
+    }
+
+    private async void StartDash(Vector2 dashDistance)
+    {
+        float elapsedTime = 0;
+        Vector2 dashVelocity = dashDistance / _dashTime;
+
+        while (elapsedTime < _dashTime)
+        {
+            Vector2 motion = dashVelocity * (float)GetProcessDeltaTime();
+            KinematicCollision2D collision = MoveAndCollide(motion);
+
+            if (collision != null)
+            {
+                // Stop dashing if a collision occurs
+                break;
+            }
+
+            elapsedTime += (float)GetProcessDeltaTime();
+            await ToSignal(GetTree(), "process_frame");
+        }
+
+        _isDashing = false;
     }
 
     private void HandleGravity(double delta)
@@ -140,7 +164,11 @@ public partial class Player : CharacterBody2D
         // Update the animation based on the player's state
         if (IsOnFloor())
         {
-            if (_velocity.X == 0)
+            if (_isDashing)
+            {
+                _animatedSprite.Play("jump");
+            }
+            else if (_velocity.X == 0)
             {
                 _animatedSprite.Play("idle");
             }
