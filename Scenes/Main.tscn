@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://du8eoi0khecea"]
 
 [ext_resource type="TileSet" uid="uid://dbtdtmqaswmkb" path="res://Assets/Sprites/Tilesets/metal_snow_tileset.tres" id="1_m571c"]
-[ext_resource type="PackedScene" uid="uid://w3doujxkwaa4" path="res://Scenes/Player.tscn" id="2_sbw0h"]
+[ext_resource type="PackedScene" path="res://Scenes/Player.tscn" id="2_sbw0h"]
 
 [node name="Main" type="Node2D"]
 position = Vector2(464, 584)
