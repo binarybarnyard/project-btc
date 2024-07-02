@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://bs8j7ca58oe04"
+path="res://.godot/imported/blue_barrel_open-Sheet.png-615d0f3984d67e513505118ffb08378d.ctex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://Assets/UniversalAssets/tilesets/Overgrown Slate Mine_v9/Overgrown Slate Mine/Objects/_Default Hue/Barrels/Png Files/blue_barrel_open-Sheet.png"
+dest_files=["res://.godot/imported/blue_barrel_open-Sheet.png-615d0f3984d67e513505118ffb08378d.ctex"]
+
+[params]
+
+compress/mode=0
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=false
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=1
