@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public partial class Player : CharacterBody2D
 {
@@ -80,20 +81,25 @@ public partial class Player : CharacterBody2D
         }
         else
         {
-            _velocity.X = Mathf.MoveToward(_velocity.X, 0, Speed * (float)delta);
+            _velocity.X = Mathf.MoveToward(_velocity.X, 0, Speed * (float)delta * 10);
         }
     }
 
     private void HandleJump()
     {
+        if (IsOnFloor())
+        {
+            // Recharge Double Jump while on floor
+            _canDoubleJump = true;
+        }
+
         // Listen for Jump Event
         if (Input.IsActionJustPressed("jump"))
         {
-            // Recharge Double Jump while on floor
+            
             if (IsOnFloor())
             {
                 _velocity.Y = JumpVelocity;
-                _canDoubleJump = true;
                 _animatedSprite.Play("jump");
             }
             // Double Jump (restart jump animation)
@@ -107,8 +113,9 @@ public partial class Player : CharacterBody2D
         }
     }
 
-    private void HandleDash()
-    { // Must be on the floor or have air dash enabled
+    private async void HandleDash()
+    {
+        // Must be on the floor or have air dash enabled
         if (Input.IsActionJustPressed("dash") && !_isDashing && (IsOnFloor() || _canAirDash))
         {
             _isDashing = true;
@@ -118,18 +125,18 @@ public partial class Player : CharacterBody2D
             {
                 _animatedSprite.Stop();
                 _animatedSprite.Play("jump");
-                StartDash(-dashDistance);
+                await StartDash(-dashDistance);
             }
             else if (_lastHorizontalInput == "right")
             {
                 _animatedSprite.Stop();
                 _animatedSprite.Play("jump");
-                StartDash(dashDistance);
+                await StartDash(dashDistance);
             }
         }
     }
 
-    private async void StartDash(Vector2 dashDistance)
+    private async Task StartDash(Vector2 dashDistance)
     {
         float elapsedTime = 0;
         Vector2 dashVelocity = dashDistance / _dashTime;
@@ -154,9 +161,11 @@ public partial class Player : CharacterBody2D
 
     private void HandleGravity(double delta)
     {
-        // Apply gravity if the player is not on the floor
-        if (!IsOnFloor())
+        // Apply gravity only if the player is not on the floor and not dashing
+        if (!IsOnFloor() && !_isDashing)
+        {
             _velocity.Y += gravity * (float)delta;
+        }
     }
 
     private void UpdateAnimation()
