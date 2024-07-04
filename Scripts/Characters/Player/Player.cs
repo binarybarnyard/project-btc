@@ -19,6 +19,7 @@ public partial class Player : CharacterBody2D
 
     // Environment
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
+    public const float TerminalVelocity = 600.0f;
 
     // Animation
     private AnimatedSprite2D _animatedSprite;
@@ -96,7 +97,6 @@ public partial class Player : CharacterBody2D
         // Listen for Jump Event
         if (Input.IsActionJustPressed("jump"))
         {
-            
             if (IsOnFloor())
             {
                 _velocity.Y = JumpVelocity;
@@ -162,8 +162,22 @@ public partial class Player : CharacterBody2D
     private void HandleGravity(double delta)
     {
         // Apply gravity only if the player is not on the floor and not dashing
+        // Max fall speed cannot go past TerminalVelocity
+        // TODO: Walk animation plays when walking off ledge
         if (!IsOnFloor() && !IsDashing)
         {
+            _velocity.Y += gravity * (float)delta;
+            _velocity.Y = Mathf.Min(_velocity.Y, TerminalVelocity);
+        }
+        else if (IsDashing)
+        {
+            _velocity.Y = 0;
+        }
+
+        // Reset and apply gravity if headache on ceiling 
+        if (IsOnCeiling())
+        {
+            _velocity.Y = 0;
             _velocity.Y += gravity * (float)delta;
         }
     }
