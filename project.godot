@@ -15,7 +15,7 @@ metroidvania_system/settings_file="res://MetSysSettings.tres"
 [application]
 
 config/name="Project-BTC"
-run/main_scene="res://Scenes/Main.tscn"
+run/main_scene="res://Scenes/UI/TitleScreen.tscn"
 config/features=PackedStringArray("4.2", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
