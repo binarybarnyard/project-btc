@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://c406q8px6obxb"]
 
 [ext_resource type="Script" path="res://Scripts/UI/Title/TitleScreen.cs" id="1_3i5vv"]
-[ext_resource type="AudioStream" uid="uid://rkhpijsta4py" path="res://Assets/Audio/Music/Title/Heartbreaking(chosic.com).mp3" id="2_l204a"]
-[ext_resource type="Texture2D" uid="uid://crt80a25gyne6" path="res://Assets/Images/Title/btcTitleScreen0.png" id="3_wpxwt"]
+[ext_resource type="AudioStream" uid="uid://cwarr66te546j" path="res://Assets/Audio/Music/Title/Heartbreaking(chosic.com).mp3" id="2_l204a"]
+[ext_resource type="Texture2D" uid="uid://cermenbbtu1xi" path="res://Assets/Images/Title/btcTitleScreen0.png" id="3_wpxwt"]
 
 [sub_resource type="SystemFont" id="SystemFont_0iuag"]
 font_names = PackedStringArray("Nodesto Caps")
