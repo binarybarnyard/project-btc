@@ -24,7 +24,7 @@ public partial class TitleScreen : Control
 	private void OnNewGamePressed()
 	{
 		// Replace "MainScene" with the path to your main game scene
-		GetTree().ChangeSceneToFile("res://Scenes/Main.tscn");
+		GetTree().ChangeSceneToFile("res://Scenes/MainScene.tscn");
 	}
 
 	private void OnExitPressed()
