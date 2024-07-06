@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bakgyeg8xfdop"]
+
+[ext_resource type="Script" path="res://Scripts/Pickups/AirDashItem.cs" id="1_40nk7"]
+[ext_resource type="Texture2D" uid="uid://8lsya8i2xwl6" path="res://icon.svg" id="2_0bxvb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a38w2"]
+size = Vector2(32, 32)
+
+[node name="AirDashItem" type="Area2D"]
+script = ExtResource("1_40nk7")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_0bxvb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_a38w2")
+
+[node name="FloorRayCast" type="RayCast2D" parent="."]
+target_position = Vector2(0, 20)

@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://du8eoi0khecea"]
+[gd_scene load_steps=7 format=3 uid="uid://du8eoi0khecea"]
 
 [ext_resource type="TileSet" uid="uid://dbtdtmqaswmkb" path="res://Assets/Sprites/Tilesets/metal_snow_tileset.tres" id="1_m571c"]
 [ext_resource type="PackedScene" uid="uid://w3doujxkwaa4" path="res://Scenes/Player.tscn" id="2_sbw0h"]
 [ext_resource type="Texture2D" uid="uid://0qhx8ds6hppr" path="res://Assets/Backgrounds/placeholderbg.png" id="3_06wf2"]
+[ext_resource type="PackedScene" uid="uid://k4q2bs33d5i7" path="res://Scenes/Pickups/DoubleJumpItem.tscn" id="4_ainna"]
+[ext_resource type="PackedScene" uid="uid://dmc66io7nm81t" path="res://Scenes/Pickups/DashItem.tscn" id="5_rre3j"]
+[ext_resource type="PackedScene" uid="uid://bakgyeg8xfdop" path="res://Scenes/Pickups/AirDashItem.tscn" id="6_e47vy"]
 
 [node name="Main" type="Node2D"]
 position = Vector2(464, 584)
@@ -31,3 +34,12 @@ offset_top = -10.0
 offset_right = 2950.0
 offset_bottom = 1190.0
 texture = ExtResource("3_06wf2")
+
+[node name="DoubleJumpItem" parent="." instance=ExtResource("4_ainna")]
+position = Vector2(-132, -33)
+
+[node name="DashItem" parent="." instance=ExtResource("5_rre3j")]
+position = Vector2(-168, -69)
+
+[node name="AirDashItem" parent="." instance=ExtResource("6_e47vy")]
+position = Vector2(-205, -105)

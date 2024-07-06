@@ -11,9 +11,11 @@ public partial class Player : CharacterBody2D
     public const float JumpVelocity = -400.0f;
     
     // Powers
+    public bool DoubleJumpEnabled = false;
     public bool CanDoubleJump = false;
+    public bool DashEnabled = false;
     public bool IsDashing = false;
-    public bool CanAirDash = true;
+    public bool AirDashEnabled = false;
     public const float DashVelocity = 500.0f;
     public const float DashTime = 0.2f; // Time in seconds
 
@@ -88,7 +90,7 @@ public partial class Player : CharacterBody2D
 
     private void HandleJump()
     {
-        if (IsOnFloor())
+        if (IsOnFloor() && DoubleJumpEnabled)
         {
             // Recharge Double Jump while on floor
             CanDoubleJump = true;
@@ -115,8 +117,8 @@ public partial class Player : CharacterBody2D
 
     private async void HandleDash()
     {
-        // Must be on the floor or have air dash enabled
-        if (Input.IsActionJustPressed("dash") && !IsDashing && (IsOnFloor() || CanAirDash))
+        // Must have dash enabled and either on the floor or air dash enabled
+        if (Input.IsActionJustPressed("dash") && !IsDashing && DashEnabled && (IsOnFloor() || AirDashEnabled))
         {
             IsDashing = true;
             Vector2 dashDistance = new Vector2(DashVelocity * DashTime, 0);
