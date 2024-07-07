@@ -34,6 +34,7 @@ namespace ProjectBTC.Scripts.PowerUps
                 IsDashing = true;
                 soundPlayer.Play();
 
+                //To-Do: Fix this calculation
                 Vector2 dashVelocity = new Vector2(DashVelocity, 0);
                 float horizontalInput = Input.GetAxis("move_left", "move_right");
 
@@ -71,5 +72,11 @@ namespace ProjectBTC.Scripts.PowerUps
             //body.Velocity = Vector2.Zero;
             IsDashing = false;
         }
+
+        public void Update(double delta)
+        {
+            // Do Nothing (no-op)
+        }
+
     }
 }

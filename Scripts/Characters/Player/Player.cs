@@ -2,7 +2,7 @@ using Godot;
 using ProjectBTC.Scripts.PowerUps;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 
 public partial class Player : CharacterBody2D
 {
@@ -27,50 +27,49 @@ public partial class Player : CharacterBody2D
 	private AnimationPlayer _animationPlayer;
 	private Dictionary<string, IPowerUp> collectedPowers = new Dictionary<string, IPowerUp>();
 
-
 	public override void _Ready()
 	{
 		Console.WriteLine("_Ready");
 		_animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-		collectedPowers.Add( Dash.InputMapName, new Dash(this, _animatedSprite));
+		collectedPowers.Add(DoubleJump.InputMapName, new DoubleJump(this, _animatedSprite));
+		collectedPowers.Add(Dash.InputMapName, new Dash(this, _animatedSprite));
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		Console.WriteLine("_PhysicsProcess");
-		HandleControls(delta);
-		Console.WriteLine("_HandleControls Passed");
+		Console.WriteLine("PhysicsProcess");
 		UpdateAnimation();
 		Console.WriteLine("UpdateAnimation Passed");
 		HandleGravity(delta);
 		Console.WriteLine("HandleGravity Passed");
-
+		HandleControls(delta);
+		Console.WriteLine("HandleControls Passed");
+		PowerUpdate(delta); // Run update on any powers added in case they need to reset based on the player's position
 		if (!IsOnFloor())
 		{
 			_leftFloor = true;
 		}
+
+		MoveAndSlide();
 	}
 
-	public override void _Input(InputEvent @event)
+	private void PowerUpdate(double delta) 
 	{
-		foreach (string action in collectedPowers.Keys)
-		{
-			if (@event.IsAction(action))
-			{
-				collectedPowers[action].Execute();
-			}
-		}
+		collectedPowers.Keys.ToList().ForEach(k => collectedPowers[k].Update(delta));
 	}
 
 	private void HandleControls(double delta)
 	{
 		HandleJump();
 		HandleMovement(delta);
-
-		// Apply the velocity to the player
-		Velocity = _velocity;
-		MoveAndSlide();
+		foreach (string action in collectedPowers.Keys)
+		{
+			if (Input.IsActionJustPressed(action))
+			{
+				collectedPowers[action].Execute();
+			}
+		}
 	}
 
 	private void HandleMovement(double delta)
@@ -79,20 +78,16 @@ public partial class Player : CharacterBody2D
 		Vector2 direction = Input.GetVector("move_left", "move_right", "move_up", "move_down");
 		if (direction != Vector2.Zero)
 		{
-			// Normalize only if both horizontal and vertical inputs are non-zero
 			if (direction.X != 0 && direction.Y != 0)
 			{
 				direction = direction.Normalized();
-				// Add 1/2 speed to account for multi-directional input slowdown while grounded
 				_velocity.X = direction.X * (Speed + Speed / 2);
 			}
 			else
 			{
-				// Apply the speed
 				_velocity.X = direction.X * Speed;
 			}
 
-			// Store the last horizontal input direction for flipping the sprite
 			if (direction.X < 0)
 				_lastHorizontalInput = "left";
 			else if (direction.X > 0)
@@ -102,74 +97,57 @@ public partial class Player : CharacterBody2D
 		{
 			_velocity.X = Mathf.MoveToward(_velocity.X, 0, Speed * (float)delta * 10);
 		}
+
+		// Update Velocity only with horizontal movement
+		Velocity = new Vector2(_velocity.X, Velocity.Y);
 	}
 
 	private void HandleJump()
 	{
-
-		if (IsOnFloor() && DoubleJumpEnabled)
+		if (IsOnFloor())
 		{
-			// Recharge Double Jump while on floor
 			CanDoubleJump = true;
 		}
 
 		if (IsOnFloor() && _leftFloor)
 		{
-			// Play landing sound if you weren't on the floor but now are
 			GetNode<AudioStreamPlayer2D>("Land").Play();
 			_leftFloor = false;
 		}
 
 		// Listen for Jump Event
-		if (Input.IsActionJustPressed("jump"))
+		if (Input.IsActionJustPressed("jump") && IsOnFloor())
 		{
-			if (IsOnFloor())
-			{
-				_velocity.Y = JumpVelocity;
-				_animatedSprite.Play("jump");
-				GetNode<AudioStreamPlayer2D>("Jump").Play();
-			}
-			// Double Jump (restart jump animation)
-			else if (CanDoubleJump)
-			{
-				_velocity.Y = JumpVelocity;
-				CanDoubleJump = false;
-				_animatedSprite.Stop();
-				_animatedSprite.Play("jump");
-				GetNode<AudioStreamPlayer2D>("Jump").Play();
-			}
+			_velocity.Y = JumpVelocity;
+			_animatedSprite.Play("jump");
+			GetNode<AudioStreamPlayer2D>("Jump").Play();
+			// Update Velocity with jump
+			Velocity = new Vector2(Velocity.X, _velocity.Y);
 		}
 	}
 
 	private void HandleGravity(double delta)
 	{
-		// Apply gravity only if the player is not on the floor and not dashing
-		// Max fall speed cannot go past TerminalVelocity
-		// TODO: Walk animation plays when walking off ledge
 		if (!IsOnFloor())
 		{
 			_velocity.Y += gravity * (float)delta;
 			_velocity.Y = Mathf.Min(_velocity.Y, TerminalVelocity);
 		}
 
-		// Reset and apply gravity if headache on ceiling 
 		if (IsOnCeiling())
 		{
 			_velocity.Y = 0;
 			_velocity.Y += gravity * (float)delta;
 		}
+
+		// Update Velocity only with vertical movement
+		Velocity = new Vector2(Velocity.X, _velocity.Y);
 	}
 
 	private void UpdateAnimation()
 	{
-		// Update the animation based on the player's state
 		if (IsOnFloor())
 		{
-			// if (IsDashing)
-			// {
-			// 	_animatedSprite.Play("jump");
-			// }
-			// else
 			if (_velocity.X == 0)
 			{
 				_animatedSprite.Play("idle");
@@ -180,7 +158,6 @@ public partial class Player : CharacterBody2D
 			}
 		}
 
-		// Flip the sprite based on the last horizontal input direction
 		if (_lastHorizontalInput == "left")
 		{
 			_animatedSprite.FlipH = true;

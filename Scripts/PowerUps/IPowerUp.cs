@@ -7,5 +7,6 @@ namespace ProjectBTC.Scripts.PowerUps
         public static string InputMapName { get; set; }
         public static string Name { get; set; }
         public Task Execute();
+        public void Update(double delta);
     }
 }

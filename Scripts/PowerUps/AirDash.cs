@@ -12,5 +12,11 @@ namespace ProjectBTC.Scripts.PowerUps
         {
             GD.Print("Air Dash Bang");
         }
+
+        public void Update(double delta)
+        {
+            throw new System.NotImplementedException();
+        }
+
     }
 }
