@@ -1,10 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://du8eoi0khecea"]
+[gd_scene load_steps=9 format=3 uid="uid://du8eoi0khecea"]
 
 [ext_resource type="Script" path="res://Scripts/MainScene.cs" id="1_lig1x"]
 [ext_resource type="PackedScene" uid="uid://w3doujxkwaa4" path="res://Scenes/Player.tscn" id="2_lq6ws"]
 [ext_resource type="TileSet" uid="uid://dbtdtmqaswmkb" path="res://Assets/Sprites/Tilesets/metal_snow_tileset.tres" id="3_bhlm5"]
-[ext_resource type="Texture2D" uid="uid://da72sq58kgk86" path="res://Assets/Backgrounds/placeholderbg.png" id="4_y5t6x"]
+[ext_resource type="Texture2D" uid="uid://0qhx8ds6hppr" path="res://Assets/Backgrounds/placeholderbg.png" id="4_y5t6x"]
 [ext_resource type="PackedScene" uid="uid://t3bcqc2e0r1c" path="res://Scenes/UI/DebugHud.tscn" id="5_1f4yq"]
+[ext_resource type="PackedScene" uid="uid://k4q2bs33d5i7" path="res://Scenes/Pickups/DoubleJumpItem.tscn" id="6_p4c65"]
+[ext_resource type="PackedScene" uid="uid://dmc66io7nm81t" path="res://Scenes/Pickups/DashItem.tscn" id="7_usltf"]
+[ext_resource type="PackedScene" uid="uid://bakgyeg8xfdop" path="res://Scenes/Pickups/AirDashItem.tscn" id="8_36d6l"]
 
 [node name="MainScene" type="Node2D"]
 position = Vector2(464, 584)
@@ -39,3 +42,12 @@ texture = ExtResource("4_y5t6x")
 [node name="DebugHud" parent="." instance=ExtResource("5_1f4yq")]
 offset_left = -19.0
 offset_right = -19.0
+
+[node name="DoubleJumpItem" parent="." instance=ExtResource("6_p4c65")]
+position = Vector2(-126, -10)
+
+[node name="DashItem" parent="." instance=ExtResource("7_usltf")]
+position = Vector2(-164, -48)
+
+[node name="AirDashItem" parent="." instance=ExtResource("8_36d6l")]
+position = Vector2(-205, -87)
