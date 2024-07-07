@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/Pickups/AirDashItem.cs" id="1_40nk7"]
 [ext_resource type="Texture2D" uid="uid://8lsya8i2xwl6" path="res://icon.svg" id="2_0bxvb"]
-[ext_resource type="AudioStream" uid="uid://iiulfeq740ow" path="res://Assets/Audio/Sounds/coin.wav" id="3_8gto5"]
+[ext_resource type="AudioStream" uid="uid://dwmtnfm3x3jm5" path="res://Assets/Audio/Sounds/coin.wav" id="3_8gto5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a38w2"]
 size = Vector2(32, 32)

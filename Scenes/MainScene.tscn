@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/MainScene.cs" id="1_lig1x"]
 [ext_resource type="PackedScene" uid="uid://w3doujxkwaa4" path="res://Scenes/Player.tscn" id="2_lq6ws"]
 [ext_resource type="TileSet" uid="uid://dbtdtmqaswmkb" path="res://Assets/Sprites/Tilesets/metal_snow_tileset.tres" id="3_bhlm5"]
-[ext_resource type="Texture2D" uid="uid://0qhx8ds6hppr" path="res://Assets/Backgrounds/placeholderbg.png" id="4_y5t6x"]
+[ext_resource type="Texture2D" uid="uid://da72sq58kgk86" path="res://Assets/Backgrounds/placeholderbg.png" id="4_y5t6x"]
 [ext_resource type="PackedScene" uid="uid://t3bcqc2e0r1c" path="res://Scenes/UI/DebugHud.tscn" id="5_1f4yq"]
 [ext_resource type="PackedScene" uid="uid://k4q2bs33d5i7" path="res://Scenes/Pickups/DoubleJumpItem.tscn" id="6_p4c65"]
 [ext_resource type="PackedScene" uid="uid://dmc66io7nm81t" path="res://Scenes/Pickups/DashItem.tscn" id="7_usltf"]

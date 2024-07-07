@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/Pickups/DashItem.cs" id="1_uf7q7"]
 [ext_resource type="Texture2D" uid="uid://8lsya8i2xwl6" path="res://icon.svg" id="2_ec57e"]
-[ext_resource type="AudioStream" uid="uid://iiulfeq740ow" path="res://Assets/Audio/Sounds/coin.wav" id="3_sui58"]
+[ext_resource type="AudioStream" uid="uid://dwmtnfm3x3jm5" path="res://Assets/Audio/Sounds/coin.wav" id="3_sui58"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a38w2"]
 size = Vector2(32, 32)
