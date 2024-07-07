@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://k4q2bs33d5i7"]
+[gd_scene load_steps=5 format=3 uid="uid://k4q2bs33d5i7"]
 
 [ext_resource type="Script" path="res://Scripts/Pickups/DoubleJumpItem.cs" id="1_j2lrk"]
 [ext_resource type="Texture2D" uid="uid://8lsya8i2xwl6" path="res://icon.svg" id="1_s3465"]
+[ext_resource type="AudioStream" uid="uid://iiulfeq740ow" path="res://Assets/Audio/Sounds/coin.wav" id="3_thu3c"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a38w2"]
 size = Vector2(32, 32)
@@ -19,3 +20,6 @@ shape = SubResource("RectangleShape2D_a38w2")
 
 [node name="FloorRayCast" type="RayCast2D" parent="."]
 target_position = Vector2(0, 20)
+
+[node name="Coin" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_thu3c")
