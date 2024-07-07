@@ -31,6 +31,7 @@ public partial class PickupArea2D : Area2D
         if (body is Player player && !Collected)
         {
             ApplyPickupEffect(body as Player);
+            GetNode<AudioStreamPlayer2D>("Coin").Play();
             Collected = true;
         }
     }
