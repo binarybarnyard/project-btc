@@ -1,6 +1,7 @@
 using Godot;
+using ProjectBTC.Scripts.PowerUps;
 using System;
-using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 public partial class Player : CharacterBody2D
@@ -11,15 +12,11 @@ public partial class Player : CharacterBody2D
 	private bool _leftFloor = true;
 	public const float Speed = 300.0f;
 	public const float JumpVelocity = -400.0f;
-	
+
 	// Powers
 	public bool DoubleJumpEnabled = false;
 	public bool CanDoubleJump = false;
-	public bool DashEnabled = false;
-	public bool IsDashing = false;
 	public bool AirDashEnabled = false;
-	public const float DashVelocity = 500.0f;
-	public const float DashTime = 0.2f; // Time in seconds
 
 	// Environment
 	public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
@@ -28,6 +25,7 @@ public partial class Player : CharacterBody2D
 	// Animation
 	private AnimatedSprite2D _animatedSprite;
 	private AnimationPlayer _animationPlayer;
+	private Dictionary<string, IPowerUp> collectedPowers = new Dictionary<string, IPowerUp>();
 
 
 	public override void _Ready()
@@ -35,6 +33,7 @@ public partial class Player : CharacterBody2D
 		Console.WriteLine("_Ready");
 		_animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		collectedPowers.Add( Dash.InputMapName, new Dash(this, _animatedSprite));
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -53,10 +52,20 @@ public partial class Player : CharacterBody2D
 		}
 	}
 
+	public override void _Input(InputEvent @event)
+	{
+		foreach (string action in collectedPowers.Keys)
+		{
+			if (@event.IsAction(action))
+			{
+				collectedPowers[action].Execute();
+			}
+		}
+	}
+
 	private void HandleControls(double delta)
 	{
 		HandleJump();
-		HandleDash();
 		HandleMovement(delta);
 
 		// Apply the velocity to the player
@@ -132,66 +141,15 @@ public partial class Player : CharacterBody2D
 		}
 	}
 
-	private async void HandleDash()
-	{
-		// Must have dash enabled and either on the floor or air dash enabled
-		if (Input.IsActionJustPressed("dash") && !IsDashing && DashEnabled && (IsOnFloor() || AirDashEnabled))
-		{
-			IsDashing = true;
-			GetNode<AudioStreamPlayer2D>("Dash").Play();
-			Vector2 dashDistance = new Vector2(DashVelocity * DashTime, 0);
-
-			if (_lastHorizontalInput == "left")
-			{
-				_animatedSprite.Stop();
-				_animatedSprite.Play("jump");
-				await StartDash(-dashDistance);
-			}
-			else if (_lastHorizontalInput == "right")
-			{
-				_animatedSprite.Stop();
-				_animatedSprite.Play("jump");
-				await StartDash(dashDistance);
-			}
-		}
-	}
-
-	private async Task StartDash(Vector2 dashDistance)
-	{
-		float elapsedTime = 0;
-		Vector2 DashVelocity = dashDistance / DashTime;
-
-		while (elapsedTime < DashTime)
-		{
-			Vector2 motion = DashVelocity * (float)GetProcessDeltaTime();
-			KinematicCollision2D collision = MoveAndCollide(motion);
-
-			if (collision != null)
-			{
-				// Stop dashing if a collision occurs
-				break;
-			}
-
-			elapsedTime += (float)GetProcessDeltaTime();
-			await ToSignal(GetTree(), "process_frame");
-		}
-
-		IsDashing = false;
-	}
-
 	private void HandleGravity(double delta)
 	{
 		// Apply gravity only if the player is not on the floor and not dashing
 		// Max fall speed cannot go past TerminalVelocity
 		// TODO: Walk animation plays when walking off ledge
-		if (!IsOnFloor() && !IsDashing)
+		if (!IsOnFloor())
 		{
 			_velocity.Y += gravity * (float)delta;
 			_velocity.Y = Mathf.Min(_velocity.Y, TerminalVelocity);
-		}
-		else if (IsDashing)
-		{
-			_velocity.Y = 0;
 		}
 
 		// Reset and apply gravity if headache on ceiling 
@@ -207,11 +165,12 @@ public partial class Player : CharacterBody2D
 		// Update the animation based on the player's state
 		if (IsOnFloor())
 		{
-			if (IsDashing)
-			{
-				_animatedSprite.Play("jump");
-			}
-			else if (_velocity.X == 0)
+			// if (IsDashing)
+			// {
+			// 	_animatedSprite.Play("jump");
+			// }
+			// else
+			if (_velocity.X == 0)
 			{
 				_animatedSprite.Play("idle");
 			}

@@ -1,15 +1,16 @@
+using System.Threading.Tasks;
 using Godot;
 
 namespace ProjectBTC.Scripts.PowerUps
 {
     public class DoubleJump : IPowerUp
     {
-        public string InputMapName { get; set; } = "dash";
-        public string Name { get; set; } = "Dash";
+        public static string InputMapName { get; set; } = "jump";
+        public static string Name { get; set; } = "Double Jump";
 
-        public void Execute()
+        public async Task Execute()
         {
-            GD.Print("Dash Bang");
+            GD.Print("Double Jump Bang");
         }
     }
 }

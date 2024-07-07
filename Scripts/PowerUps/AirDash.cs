@@ -1,16 +1,16 @@
+using System.Threading.Tasks;
 using Godot;
 
 namespace ProjectBTC.Scripts.PowerUps
 {
     public class AirDash : IPowerUp
     {
-        public string InputMapName { get; set; } = "jump";
-        public string Name { get; set; } = "Double Jump";
+        public static string InputMapName { get; set; } = "dash";
+        public static string Name { get; set; } = "Air Dash";
 
-        public void Execute()
+        public async Task Execute()
         {
-            GD.Print("Double Jump Bang");
+            GD.Print("Air Dash Bang");
         }
-
     }
 }
